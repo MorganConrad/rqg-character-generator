@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset=utf-8>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create a Runequest NPC</title>
+
+<link rel="stylesheet" href="assets/css/mqg.css" >
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<meta property="og:title" content="Create a Runequest NPC" />
+<meta property="og:url" content="https://someWebsiteThatDoesntExistYetXXX.com/index.html" />
+<meta property="og:description" content="Create a Runequest NPC"/>
+<meta property="og:type" content="website"/>
+
+<meta name=”twitter:title” content="Create a Runequest NPC" />
+<meta name=”twitter:url” content=”https://someWebsiteThatDoesntExistYetXXX.com/index.html” />
+<meta name="twitter:description" content="Create a Runequest NPC" />
+
+  <script type="module">
+    import { CharacterGenerator } from "./assets/js/CharacterGenerator.js";
+    import { importCharacter } from "./assets/js/importCharacter.js"
+    import { marked } from "./assets/js/marked_min.esm.js";
+
+    function doCreate(settings) {
+      const cg = new CharacterGenerator();
+      let json = cg.generate(settings);
+
+      return doImport(json);
+    }
+
+
+    function doImport(json) {
+      let markdown = importCharacter(json);
+      let html = marked(markdown);
+      let name = json.name || "";
+      let seeChar = window.open("seeChar.html?name=" + name, '_blank');
+      seeChar.characterData = { json, html, markdown };
+
+      return { json, markdown, html };
+    }
+
+
+    window._fns = { doCreate, doImport }; // hack TODO
+
+  </script>
+
+  <script>
+
+    // let detailsHaveBeenUpdated = false;
+
+    function onLoad() {
+      document.create.addEventListener('submit', handleSubmit, true);
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const formdata = new FormData(event.target);
+      const settings = Object.fromEntries(formdata.entries());
+      settings.archetypes = formdata.getAll("archetype");
+      settings.stats = {average: settings.characteristic};
+
+      let advancedForm = document.advanced;
+      if (advancedForm.used) {
+        const advancedFormData = new FormData(advancedForm);
+        const advancedSettings = Object.fromEntries(advancedFormData.entries());
+        Object.assign(settings.stats, advancedSettings);
+      }
+
+      let round5 = document.getElementById("round5");
+      settings.round5 = round5.checked;
+      window._fns.doCreate(settings);
+    }
+
+
+    function upload(event) {
+      //let file = event.nextElementSibling.files[0];
+      let file = event.files[0];
+      readFile(file)
+        .then(JSON.parse)
+        .then(window._fns.doImport)
+        .catch(console.error);
+    }
+
+
+    function readFile(file){
+      return new Promise((resolve, reject) => {
+        let fr = new FileReader();
+        fr.onload = () => { resolve(fr.result ) };
+        fr.onerror = reject;
+
+        fr.readAsText(file);
+      });
+    }
+
+
+    function updateAdvanced(advanced) {
+      document.advanced.used = true;
+    }
+
+  </script>
+
+</head>
+
+<body onload="onLoad()">
+<main>
+
+  <a href="createHelp.html" class="button pull-right">Help</a>
+<h1>Create an NPC</h1>
+
+
+<form name="create" id="create" action="#">
+  <fieldset id="character_info" class="formInput2">
+    <legend>Character Information</legend>
+    <label for="name">Name</label>
+    <input type="text" title="Name" id="name" value="Argrath" name="name" size="30">
+    <label for="description">Description</label>
+    <!--input type="text" title="Description" value="Argrath the Lancer" id="description" name="comment"-->
+    <textarea title="Description" id="description" name="comment" cols="30">Description goes here</textarea>
+
+    <label for="cults">Primary Cult</label>
+    <select name="cults" id="cults">
+      <option value="none">None</option>
+      <option value="Orlanth">Orlanth</option>
+      <option value="Ernalda">Ernalda</option>
+      <option value="Humakt">Humakt</option>
+      <option value="Issaries">Issaries</option>
+      <option value="Lhankor Mhy">Lhankor Mhy</option>
+      <option value="Storm Bull">Storm Bull</option>
+      <option value="Yelmalio">Yelmalio</option>
+      <option value="Seven Mothers">Seven Mothers</option>
+      <option value="Aldrya">Aldrya</option>
+      <option value="Kygor Litor">Kygor Litor</option>
+      <option value="Zorak Zoran">Zorak Zoran</option>
+      <option value="Thed">Thed</option>
+    </select>
+
+    <label for="race">Race</label>
+    <select name="race" id="race">
+      <option value="Human">Human</option>
+      <option value="Brown Elf">Brown Elf</option>
+      <option value="Baboon">Baboon</option>
+      <option value="Duck">Duck</option>
+      <option value="Minotaur">Minotaur</option>
+      <option value="Agimori">Agimori</option>
+      <option value="Morokanth">Morokanth</option>
+      <option value="Dwarf">Dwarf</option>
+      <option value="Dark Troll">Dark Troll</option>
+      <option value="Great Troll">Great Troll</option>
+      <option value="Trollkin">Trollkin</option>
+      <option value="Tusk Rider">Tusk Rider</option>
+      <option value="Broo">Broo</option>
+      <option value="Ghoul">Ghoul</option>
+      <option value="Harpie">Harpie</option>
+      <option value="Huan To">Huan To</option>
+      <option value="Ogre">Ogre</option>
+      <option value="Zombie">Zombie</option>
+    </select>
+
+  </fieldset>
+
+  <fieldset id="archetypes">
+    <legend>Character Archetypes</legend>
+    <div class="formInput2">
+    <label for="fightingStyle">Fighting Style</label>
+    <select name="fightingStyle" id="fightingStyle" width="100">
+      <option value="Archer&Melee">Mixed</option>
+      <option value="Archer">Archer</option>
+      <option value="Melee">Melee</option>
+    </select>
+    </div>
+    <div class="flexCheckboxes">
+    <!--label for="Archer"><input type="checkbox" id="Archer" name="archetype" value="Archer">Archer</label>
+    <label for="Tank"><input type="checkbox" id="Tank" name="archetype" value="Melee">Tank</label-->
+    <label for="Caster"><input type="checkbox" id="Caster" name="archetype" value="Caster">Caster</label>
+    <label for="Scholar"><input type="checkbox" id="Scholar" name="archetype" value="Scholar">Scholar</label>
+    <label for="Hunter"><input type="checkbox" id="Hunter" name="archetype" value="Hunter">Hunter</label>
+    <label for="Bandit"><input type="checkbox" id="Bandit" name="archetype" value="Bandit">Bandit</label>
+    <label for="Healer"><input type="checkbox" id="Healer" name="archetype" value="Healer">Healer</label>
+    <label for="Noble"><input type="checkbox" id="Noble" name="archetype" value="Noble">Noble</label>
+    <label for="Shaman"><input type="checkbox" id="Shaman" name="archetype" value="Shaman">Shaman</label>
+    <label for="Cavalry"><input type="checkbox" id="Cavalry" name="archetype" value="Cavalry">Cavalry</label>
+    <label for="Entertainer"><input type="checkbox" id="Entertainer" name="archetype" value="Entertainer">Entertainer</label>
+    </div>
+  </fieldset>
+
+  <fieldset id="level" class="formInput2">
+    <legend>Character Level</legend>
+    <label for="characteristic">Average Characteristic</label>
+    <input type="number" title="Average Characteristic" id="characteristic" value="12" name="characteristic">
+    <label for="weaponsAverage">Average Weapon Skill</label>
+    <input type="number" title="Average Weapon Skill" id="weaponsAverage" value="55" step="5" name="weaponsAverage">
+    <label for="skillsAverage">Average non-weapon Skill</label>
+    <input type="number" title="Average non-weapon Skill" id="skillsAverage" value="55" step="5" name="skillsAverage">
+    <label for="armor">Armor</label>
+    <select name="armor" id="armor">
+      <option value="none">None (0)</option>
+      <option value="poor">Leather (1)</option>
+      <option value="ok">Cuirbolli (3)</option>
+      <option value="good">Ring (4-5)</option>
+      <option value="great">Plate (5-6)</option>
+      <option value="rune">Iron (8-9)</option>
+    </select>
+  </fieldset>
+
+  <br><button id="submit" title="Create Character" type=submit>Create</button> &nbsp;&nbsp;&nbsp; (Will appear in a new Window)
+
+</form>
+
+  <br><details id="details-outline" ontoggle="updateAdvanced(this)">
+    <summary><b>Advanced...</b></summary>
+
+    <label for="round5"><input type="checkbox" id="round5" name="round5" value="round5" Checked>Round Skills to 5%</label>
+    <br>
+
+    <form name="advanced" id="advanced" action="#">
+      <fieldset id="advanced-fieldset" class="formInput4">
+        <legend>Set Characteristic, leave blank for random</legend>
+        <label for="str">STR</label>
+        <input type="number" title="Strength" id="str" name="str">
+        <label for="con">CON</label>
+        <input type="number" title="Constitution" id="con" name="con">
+        <label for="siz">SIZ</label>
+        <input type="number" title="Size" id="siz" name="siz">
+        <label for="dex">DEX</label>
+        <input type="number" title="Dexterity" id="dex" name="dex">
+        <label for="int">INT</label>
+        <input type="number" title="Intelligence" id="int" name="int">
+        <label for="pow">POW</label>
+        <input type="number" title="Power" id="pow" name="pow">
+        <label for="cha">CHA</label>
+        <input type="number" title="Charisma" id="cha" name="cha">
+      </fieldset>
+    </form>
+
+  <br>
+
+  <b>Use existing JSON file.</b>
+  <!--button id="upload" onclick="upload(this)" class="secondary" title="Use an existing JSON File">Use a JSON File</button-->
+  <input type="file" id="uploadFile" onchange="upload(this)">
+
+  </details>
+
+<h2>Disclaimer</h2>
+    This website uses trademarks and/or copyrights owned by Chaosium Inc/Moon Design Publications LLC, which are used under Chaosium Inc’s Fan Material Policy. We are expressly prohibited from charging you to use or access this content. This website is not published, endorsed, or specifically approved by Chaosium Inc. For more information about Chaosium Inc’s products, please visit www.chaosium.com
+
+</main>
+
+<br>
+<footer id="contact">
+<address>&copy; 2022 <a href="mailto:flyingspaniel@gmail.com" title="Email me">Morgan Conrad</a>.</address>
+</footer>
+
+</body>
+</html>

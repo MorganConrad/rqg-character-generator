@@ -1,0 +1,196 @@
+
+@import 'chota.css';
+
+.aa-tags{margin-bottom:14px}
+.aa-tag{padding:5px 10px;background:#1b89d5;color:#fff;text-transform:uppercase;font-size:15px;margin-right:8px}
+.aa-tag:hover{text-decoration:none;background:#0a74b9}
+
+.allButFooter { min-height: calc(100vh - 55px); padding: 1rem 2rem; }
+
+.footer { padding: 1rem 3rem;}
+
+.foo { text-transform: uppercase; }
+
+.box {
+  padding: 1em;
+  border: 1px solid red;
+}
+
+body {
+  padding: 1rem 2rem;
+  /* emulates Chaosium “trade dress” font-family: "Georgia" */
+}
+
+body.dark {
+  --bg-color: #000;
+  --bg-secondary-color: #131316;
+  --font-color: #f5f5f5;
+  --color-grey: #ccc;
+  --color-darkGrey: #777;
+}
+
+/* emulates Chaosium “trade dress”
+h2,h3 {
+  font-family: "Albertus MT Standard"
+}
+*/
+
+@font-face {
+  font-family: 'Runes';
+  src: url('/assets/fonts/GloranthaCoreRunes1.5.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+ul {
+  list-style: none;
+  padding-inline-start: 1em;
+}
+
+
+.runes {
+  font-family: "Runes";
+}
+
+.red-caps {
+  text-transform: capitalize;
+  font-variant:small-caps;
+  color: DarkRed;
+}
+
+.gold-caps {
+  text-transform: capitalize;
+  font-variant:small-caps;
+  color: DarkGoldenRod;
+}
+
+.notebox {
+  border: 2px solid DimGray;
+  padding: 1em;
+}
+
+.table0 thead {
+  text-transform: capitalize;
+  font-variant:small-caps;
+  background-color: DarkCyan;
+  color: white;
+}
+
+.stats thead {
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+
+/* .table0 is a standard stats table */
+
+.table0 th,td {
+  text-align: center;
+}
+
+.table0 th:nth-child(1) {
+  text-align: left;
+}
+
+.table0 td:nth-child(1) {
+  text-align: left;
+}
+
+.table0 tr:nth-child(even) {
+  background-color: LightCyan;
+}
+
+
+/* Table where first column in also DarkCyan */
+
+.table1 td:nth-child(1) {
+  text-transform: capitalize;
+  font-variant:small-caps;
+  background-color: DarkCyan;
+  color: white;
+}
+
+.chapter-header {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.outline ul {
+  list-style: none;
+}
+
+.outline ul  {
+  padding-inline-start: 1em;
+}
+
+.outline ul:nth-child(1)  {
+  padding-inline-start: 0;
+}
+
+.character-other ul {
+  list-style: none;
+}
+
+#details-outline {
+  font-size: large;
+}
+
+.character-2 {
+  font-weight: bold;
+}
+
+/* nice labels and inputs */
+
+.formInput2 {
+  display:grid;
+  grid-template-columns: max-content max-content;
+  grid-gap:5px;
+}
+
+.formInput2 label {
+  text-align:right;
+  padding: 0.5em 0;
+}
+
+.formInput2 label:after { content: ":"; }
+
+.formInput4 {
+  display:grid;
+  grid-gap: 4px 1em;
+  grid-template-columns: repeat(4, max-content);
+}
+
+.formInput4 label {
+  text-align:right;
+  padding: 0.5em 0;
+}
+
+.formInput4 input {
+  width: 6em !important;
+}
+
+.formInput4 label:after { content: ":"; }
+
+
+.flexCheckboxes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexCheckboxes input {
+  vertical-align: text-bottom;
+}
+
+.flexCheckboxes label {
+  flex: 0 1 25%;
+}
+
+.flexCheckboxes label:last-of-type {
+  flex: 0 1 auto;
+}
+
+
+#fightingStyle {
+  width: 150%;
+}

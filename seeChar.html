@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset=utf-8>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create a Runequest NPC</title>
+
+  <link rel="stylesheet" href="assets/css/mqg.css" >
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <meta property="og:title" content="Create a Runequest NPC" />
+  <meta property="og:url" content="https://someWebsiteThatDoesntExistYetXXX.com/index.html" />
+  <meta property="og:description" content="Create a Runequest NPC"/>
+  <meta property="og:type" content="website"/>
+
+  <meta name=”twitter:title” content="Create a Runequest NPC" />
+  <meta name=”twitter:url” content=”https://someWebsiteThatDoesntExistYetXXX.com/index.html” />
+  <meta name="twitter:description" content="Create a Runequest NPC" />
+
+  <script>
+    function onLoad() {
+      let niceJSON = JSON.stringify(window.characterData.json, null, 2)
+      document.getElementById("characterJSON").value = niceJSON;
+      document.getElementById("characterHTML").innerHTML = window.characterData.html;
+
+      let downloadJSON = document.getElementById("downloadJSON");
+      let blob1 = new Blob([niceJSON], { type: 'application/json' })
+      const objectURL1 = window.URL.createObjectURL(blob1)
+      downloadJSON.href = objectURL1;
+      downloadJSON.download = window.characterData.json.name + '.json';
+      downloadJSON.title = "Download JSON file to " + downloadJSON.download;
+
+      let downloadMD = document.getElementById("downloadMD");
+      let blob2 = new Blob([window.characterData.markdown], { type: 'text/markdown' })
+      const objectURL2 = window.URL.createObjectURL(blob2)
+      downloadMD.href = objectURL2;
+      downloadMD.download = window.characterData.json.name + '.md';
+      downloadMD.title = "Download Markdown file to " + downloadMD.download;
+    }
+
+  </script>
+</head>
+
+<body onload="onLoad()">
+
+  <section id="characterHTML" name="characterHTML"></section>
+  <br><br>
+
+  <label for="characterJSON"><b>Raw Character Values</b></label>&nbsp;&nbsp;&nbsp;
+  <a id="downloadJSON" class="button primary">Download JSON File</a>&nbsp;&nbsp;&nbsp;
+  <a id="downloadMD" class="button secondary">Download Markdown File</a>
+  <br><br>
+  <textarea rows="10" cols="60" readonly id="characterJSON" name="characterJSON">
+
+  </textarea>
+
+</body>
+
+</html>
